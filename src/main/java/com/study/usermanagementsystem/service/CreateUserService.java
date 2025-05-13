@@ -1,0 +1,34 @@
+package com.study.usermanagementsystem.service;
+
+import com.study.usermanagementsystem.common.exception.UserException;
+import com.study.usermanagementsystem.common.response.UserStatusCode;
+import com.study.usermanagementsystem.domain.User;
+import com.study.usermanagementsystem.dto.request.SignUpRequestDto;
+import com.study.usermanagementsystem.dto.response.SignUpResponseDto;
+import com.study.usermanagementsystem.repository.InMemoryUserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CreateUserService {
+
+    private final InMemoryUserRepository inMemoryUserRepository;
+
+    public SignUpResponseDto register(SignUpRequestDto requestDto) {
+
+        validateDuplicateLoginId(requestDto.getLoginId());
+
+        User user = User.create(requestDto.getLoginId(), requestDto.getPassword(), requestDto.getEmail());
+
+        return SignUpResponseDto.from(inMemoryUserRepository.save(user));
+
+    }
+
+    private void validateDuplicateLoginId(String loginId) {
+        inMemoryUserRepository.findByLoginId(loginId)
+                .ifPresent(user -> {
+                    throw new UserException(UserStatusCode.USER_ALREADY_EXISTS);
+                });
+    }
+}
