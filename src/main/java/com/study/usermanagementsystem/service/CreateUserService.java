@@ -7,6 +7,7 @@ import com.study.usermanagementsystem.dto.request.SignUpRequestDto;
 import com.study.usermanagementsystem.dto.response.SignUpResponseDto;
 import com.study.usermanagementsystem.repository.InMemoryUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service;
 public class CreateUserService {
 
     private final InMemoryUserRepository inMemoryUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public SignUpResponseDto register(SignUpRequestDto requestDto) {
 
         validateDuplicateLoginId(requestDto.getUsername());
 
-        User user = User.create(requestDto.getUsername(), requestDto.getPassword(), requestDto.getNickname());
+        User user = User.create(requestDto.getUsername(), passwordEncoder.encode(requestDto.getPassword()), requestDto.getNickname());
 
         return SignUpResponseDto.from(inMemoryUserRepository.save(user));
 
