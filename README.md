@@ -45,7 +45,7 @@ java -jar build/libs/UserManagementSystem-0.0.1-SNAPSHOT.jar
 ---
 
 ## 📖 Swagger 문서 접속
-[PDF](./docs/Swagger%20UI.pdf.pdf)
+[Swagger PDF](./docs/Swagger-UI.pdf)
 ```text
 Local 실행 시: http://localhost:8080/swagger-ui/index.html
 배포 링크: [첨부예정]
