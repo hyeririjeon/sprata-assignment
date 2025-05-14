@@ -4,6 +4,9 @@ import com.study.usermanagementsystem.common.response.CommonStatusCode;
 import com.study.usermanagementsystem.common.response.ErrorResponse;
 import com.study.usermanagementsystem.common.response.StatusCode;
 import com.study.usermanagementsystem.common.response.UserStatusCode;
+import com.study.usermanagementsystem.controller.AuthController;
+import com.study.usermanagementsystem.controller.UserController;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -12,11 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
+@Hidden
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException.class)
