@@ -35,4 +35,13 @@ public class User {
     public void setId(long id) {
         this.Id = id;
     }
+
+    public void grantAdminRole() {
+        this.role = UserRole.ADMIN;
+    }
+
+    // 인메모리 마스터 계정 미리 생성
+    public static User createMaster(String username, String password, String nickname) {
+        return new User(Long.MAX_VALUE, username, password, nickname, UserRole.MASTER, false);
+    }
 }
