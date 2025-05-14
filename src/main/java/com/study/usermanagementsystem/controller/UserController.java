@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserControllerSwagger{
 
     private final UserCreationService userCreationService;
     private final UserCommandService userCommandService;
@@ -49,7 +49,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('MASTER', 'ADMIN')")
     @GetMapping("/admin/users")
-    public ResponseEntity<List<AdminUserResponseDto>> getUser() {
+    public ResponseEntity<List<AdminUserResponseDto>> getUsers() {
         List<AdminUserResponseDto> responseDto = userQueryService.getUsers();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
