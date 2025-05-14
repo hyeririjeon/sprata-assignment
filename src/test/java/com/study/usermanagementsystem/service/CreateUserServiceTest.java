@@ -25,21 +25,21 @@ class CreateUserServiceTest {
     @DisplayName("회원가입 성공")
     void register_success() {
         // given
-        SignUpRequestDto request = new SignUpRequestDto("hyeri", "password123", "hyeri@example.com");
+        SignUpRequestDto request = new SignUpRequestDto("test", "password123", "test");
 
         // when
         SignUpResponseDto response = createUserService.register(request);
 
         // then
-        assertThat(response.getLoginId()).isEqualTo("hyeri");
-        assertThat(response.getEmail()).isEqualTo("hyeri@example.com");
+        assertThat(response.getUsername()).isEqualTo("test");
+        assertThat(response.getNickname()).isEqualTo("test");
     }
 
     @Test
     @DisplayName("회원가입 실패 - 아이디 중복")
     void register_fail_id_duplicate(){
         // given
-        SignUpRequestDto request = new SignUpRequestDto("hyeri", "password123", "hyeri@example.com");
+        SignUpRequestDto request = new SignUpRequestDto("test", "password123", "test");
         createUserService.register(request);
 
         // when & then

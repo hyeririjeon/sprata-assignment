@@ -9,12 +9,12 @@ import lombok.Getter;
 public class SignUpRequestDto {
 
     @NotNull(message = "아이디를 입력해주세요.")
-    private String loginId;
+    private String username;
 
     @NotNull(message = "비밀번호를 입력해주세요.")
     private String password;
 
-    @NotNull(message = "이메일을 입력해주세요.")
-    private String email;
+    @NotNull(message = "닉네임을 입력해주세요.")
+    private String nickname;
 
 }

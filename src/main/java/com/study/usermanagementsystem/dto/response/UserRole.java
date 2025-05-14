@@ -1,5 +1,5 @@
 package com.study.usermanagementsystem.dto.response;
 
 public enum UserRole {
-    MEMBER, ADMIN, MASTER
+    USER, ADMIN, MASTER
 }

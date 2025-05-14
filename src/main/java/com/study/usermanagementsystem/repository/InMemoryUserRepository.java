@@ -25,10 +25,10 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByLoginId(String loginId) {
+    public Optional<User> findByLoginId(String username) {
 
         return users.values().stream()
-                .filter(user -> user.getLoginId().equals(loginId))
+                .filter(user -> user.getUsername().equals(username))
                 .findFirst();
     }
 

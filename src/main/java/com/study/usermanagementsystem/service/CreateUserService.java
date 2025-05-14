@@ -17,9 +17,9 @@ public class CreateUserService {
 
     public SignUpResponseDto register(SignUpRequestDto requestDto) {
 
-        validateDuplicateLoginId(requestDto.getLoginId());
+        validateDuplicateLoginId(requestDto.getUsername());
 
-        User user = User.create(requestDto.getLoginId(), requestDto.getPassword(), requestDto.getEmail());
+        User user = User.create(requestDto.getUsername(), requestDto.getPassword(), requestDto.getNickname());
 
         return SignUpResponseDto.from(inMemoryUserRepository.save(user));
 

@@ -9,19 +9,19 @@ import lombok.Getter;
 @Getter
 public class SignUpResponseDto {
 
-    private String loginId;
+    private String username;
 
     private String password;
 
-    private String email;
+    private String nickname;
 
     private UserRole role;
 
     public static SignUpResponseDto from(User user) {
         return SignUpResponseDto.builder()
-                .loginId(user.getLoginId())
+                .username(user.getUsername())
                 .password(user.getPassword())
-                .email(user.getEmail())
+                .nickname(user.getNickname())
                 .build();
     }
 }

@@ -11,24 +11,24 @@ public class User {
 
     private Long Id;
 
-    private String loginId;
+    private String username;
 
     private String password;
 
-    private String email;
+    private String nickname;
 
     @Builder.Default
-    private UserRole role = UserRole.MEMBER;
+    private UserRole role = UserRole.USER;
 
     @Builder.Default
     private boolean isBanned = false;
 
 
-    public static User create(String loginId, String password, String email) {
+    public static User create(String username, String password, String nickname) {
         return User.builder()
-                .loginId(loginId)
+                .username(username)
                 .password(password)
-                .email(email)
+                .nickname(nickname)
                 .build();
     }
 
