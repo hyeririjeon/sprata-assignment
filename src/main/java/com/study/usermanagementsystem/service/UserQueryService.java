@@ -22,6 +22,10 @@ public class UserQueryService {
         User user = inMemoryUserRepository.findByLoginId(username)
                 .orElseThrow(() -> new UserException(UserStatusCode.USER_NOT_FOUND));
 
+        if(user.isBanned()) {
+            throw new UserException(UserStatusCode.USER_IS_BANNED);
+        }
+
         return UserResponseDto.from(user);
     }
 
@@ -31,5 +35,19 @@ public class UserQueryService {
                 .map(AdminUserResponseDto::from)
                 .toList();
 
+    }
+
+    public AdminUserResponseDto banUser(String username) {
+
+        User user = inMemoryUserRepository.findByLoginId(username)
+                .orElseThrow(() -> new UserException(UserStatusCode.USER_NOT_FOUND));
+
+        if(user.isBanned()) {
+            throw new UserException(UserStatusCode.USER_ALREADY_BANNED);
+        }
+
+        user.ban();
+
+        return AdminUserResponseDto.from(user);
     }
 }

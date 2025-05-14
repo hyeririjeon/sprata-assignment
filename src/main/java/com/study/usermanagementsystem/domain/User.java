@@ -32,6 +32,10 @@ public class User {
                 .build();
     }
 
+    public void ban() {
+        this.isBanned = true;
+    }
+
     public void setId(long id) {
         this.Id = id;
     }

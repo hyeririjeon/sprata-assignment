@@ -54,4 +54,12 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @PreAuthorize("hasAnyRole('MASTER', 'ADMIN')")
+    @PatchMapping("/admin/users/{username}/ban")
+    public ResponseEntity<AdminUserResponseDto> banUser(@PathVariable String username) {
+        AdminUserResponseDto responseDto = userQueryService.banUser(username);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 }
