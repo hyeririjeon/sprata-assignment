@@ -1,5 +1,7 @@
 package com.study.usermanagementsystem.service;
 
+import com.study.usermanagementsystem.common.exception.UserException;
+import com.study.usermanagementsystem.common.response.UserStatusCode;
 import com.study.usermanagementsystem.domain.User;
 import com.study.usermanagementsystem.dto.response.AdminUserResponseDto;
 import com.study.usermanagementsystem.dto.response.UserResponseDto;
@@ -12,8 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserQueryServiceTest {
 
@@ -47,7 +48,7 @@ class UserQueryServiceTest {
     }
 
     @Test
-    @DisplayName("관리자가 사용자 전체 조회 성공")
+    @DisplayName("사용자 전체 조회 성공")
     void get_users_info_success() {
         // given - 사용자 추가 등록
         User user = User.create("test2", passwordEncoder.encode("test"), "test");
@@ -64,4 +65,27 @@ class UserQueryServiceTest {
         assertTrue(containsTest2);
 
     }
+
+    @Test
+    @DisplayName("사용자 정지 성공")
+    void ban_user_success() {
+        // given - 기존 사용자 등록 및 상태 확인
+        User testUser = inMemoryUserRepository.findByLoginId("test").orElseThrow();
+        assertFalse(testUser.isBanned()); // 정지 전 상태 확인
+
+        // when - 사용자 정지 수행
+        userQueryService.banUser("test");
+
+        // then - 정지 상태로 변경되었는지 확인
+        assertTrue(testUser.isBanned());
+
+        // then - 이미 정지된 사용자에게 다시 정지 시도 시 예외 발생
+        UserException exception = assertThrows(UserException.class, () -> userQueryService.banUser("test"));
+        assertEquals(UserStatusCode.USER_ALREADY_BANNED, exception.getStatusCode());
+
+        // then - 정지된 사용자가 본인 정보 조회 시 예외 발생
+        UserException exception2 = assertThrows(UserException.class, () -> userQueryService.getUser("test"));
+        assertEquals(UserStatusCode.USER_IS_BANNED, exception2.getStatusCode());
+    }
+
 }
