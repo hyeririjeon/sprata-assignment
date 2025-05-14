@@ -1,22 +1,29 @@
 package com.study.usermanagementsystem.controller;
 
 import com.study.usermanagementsystem.common.jwt.JwtUtil;
+import com.study.usermanagementsystem.common.security.UserDetailsImpl;
 import com.study.usermanagementsystem.domain.User;
+import com.study.usermanagementsystem.dto.response.UserResponseDto;
 import com.study.usermanagementsystem.dto.response.UserRole;
 import com.study.usermanagementsystem.repository.InMemoryUserRepository;
+import com.study.usermanagementsystem.service.UserQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -81,6 +88,17 @@ public class UserControllerTest {
         mockMvc.perform(patch("/admin/users/{username}/roles", "user")
                         .header("Authorization", token))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("인증된 사용자가 내 정보 조회 성공")
+    void getMyInfo_success() throws Exception {
+        String token = jwtUtil.createToken("user", UserRole.USER);
+
+        mockMvc.perform(get("/myInfo")
+                        .header("Authorization", token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("user"));
     }
 
 }
