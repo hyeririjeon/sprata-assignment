@@ -37,14 +37,22 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        System.out.println("secretKey = " + secretKey);
         byte[] bytes = Base64.getDecoder().decode(secretKey);
-        System.out.println("bytes = " + bytes);
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    // 토큰 생성
+    // 실제사용 용도
     public String createToken(String username, UserRole role) {
+        return createTokenInternal(username, role, TOKEN_TIME);
+    }
+
+    // 테스트 용도
+    public String createToken(String username, UserRole role, long tokenTime) {
+        return createTokenInternal(username, role, tokenTime);
+    }
+
+    // 토큰 생성
+    public String createTokenInternal(String username, UserRole role, long tokenTime) {
         Date date = new Date();
 
         return BEARER_PREFIX +
@@ -52,7 +60,7 @@ public class JwtUtil {
                         .setSubject(username)
                         .claim(AUTHORIZATION_KEY, role.name())
                         .setIssuedAt(date)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setExpiration(new Date(date.getTime() + tokenTime))
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
