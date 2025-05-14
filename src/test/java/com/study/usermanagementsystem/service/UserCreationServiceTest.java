@@ -4,7 +4,7 @@ import com.study.usermanagementsystem.common.exception.UserException;
 import com.study.usermanagementsystem.common.response.UserStatusCode;
 import com.study.usermanagementsystem.domain.User;
 import com.study.usermanagementsystem.dto.request.SignUpRequestDto;
-import com.study.usermanagementsystem.dto.response.SignUpResponseDto;
+import com.study.usermanagementsystem.dto.response.UserResponseDto;
 import com.study.usermanagementsystem.repository.InMemoryUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,12 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 
-class CreateUserServiceTest {
+class UserCreationServiceTest {
 
-    private CreateUserService createUserService;
+    private UserCreationService userCreationService;
     private InMemoryUserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
@@ -25,7 +24,7 @@ class CreateUserServiceTest {
     void setUp() {
         userRepository = new InMemoryUserRepository();
         passwordEncoder = new BCryptPasswordEncoder();
-        createUserService = new CreateUserService(userRepository, passwordEncoder);
+        userCreationService = new UserCreationService(userRepository, passwordEncoder);
     }
 
     @Test
@@ -35,40 +34,37 @@ class CreateUserServiceTest {
         SignUpRequestDto request = new SignUpRequestDto("test", "password123", "test");
 
         // when
-        SignUpResponseDto response = createUserService.register(request);
+        UserResponseDto response = userCreationService.register(request);
 
         // then
-        assertThat(response.getUsername()).isEqualTo("test");
-        assertThat(response.getNickname()).isEqualTo("test");
+        assertEquals("test", response.getUsername());
+        assertEquals("test", response.getNickname());
     }
 
     @Test
     @DisplayName("회원가입 실패 - 아이디 중복")
-    void register_fail_id_duplicate(){
+    void register_fail_id_duplicate() {
         // given
         SignUpRequestDto request = new SignUpRequestDto("test", "password123", "test");
-        createUserService.register(request);
+        userCreationService.register(request);
 
         // when & then
-        assertThatThrownBy(() ->
-                createUserService.register(request)
-        ).isInstanceOf(UserException.class)
-                .hasMessage(UserStatusCode.USER_ALREADY_EXISTS.getMessage());
+        UserException exception = assertThrows(UserException.class, () -> userCreationService.register(request));
+        assertEquals(UserStatusCode.USER_ALREADY_EXISTS.getMessage(), exception.getMessage());
     }
 
     @Test
     @DisplayName("비밀번호 암호화 확인")
-    void password_should_be_encoded() {
+    void password_encode() {
         // given
         SignUpRequestDto request = new SignUpRequestDto("test", "1234", "test");
-        createUserService.register(request);
+        userCreationService.register(request);
 
         // when
         User savedUser = userRepository.findByLoginId("test").orElseThrow();
 
         // then
-        assertThat(savedUser.getPassword()).isNotEqualTo("1234");
-        assertThat(passwordEncoder.matches("1234", savedUser.getPassword())).isTrue();
+        assertNotEquals("1234", savedUser.getPassword());
+        assertTrue(passwordEncoder.matches("1234", savedUser.getPassword()));
     }
-
 }
