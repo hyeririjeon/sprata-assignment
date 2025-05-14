@@ -1,14 +1,17 @@
 package com.study.usermanagementsystem.controller;
 
+import com.study.usermanagementsystem.common.security.UserDetailsImpl;
 import com.study.usermanagementsystem.dto.request.SignUpRequestDto;
 import com.study.usermanagementsystem.dto.response.UserResponseDto;
 import com.study.usermanagementsystem.service.UserCommandService;
 import com.study.usermanagementsystem.service.UserCreationService;
+import com.study.usermanagementsystem.service.UserQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +20,7 @@ public class UserController {
 
     private final UserCreationService userCreationService;
     private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> register(@RequestBody @Valid SignUpRequestDto requestDto) {
@@ -29,6 +33,13 @@ public class UserController {
     @PatchMapping("/admin/users/{username}/roles")
     public ResponseEntity<UserResponseDto> grantAdminRole(@PathVariable String username) {
         UserResponseDto responseDto = userCommandService.grantAdminRole(username);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @GetMapping("/myInfo")
+    public ResponseEntity<UserResponseDto> getUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        UserResponseDto responseDto = userQueryService.getUser(userDetails.getUsername());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
