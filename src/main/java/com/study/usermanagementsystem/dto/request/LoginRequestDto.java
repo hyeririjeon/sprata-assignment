@@ -1,9 +1,11 @@
 package com.study.usermanagementsystem.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class LoginRequestDto {
 
     @NotNull(message = "아이디를 입력해주세요.")
