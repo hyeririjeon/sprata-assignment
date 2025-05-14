@@ -4,7 +4,7 @@ import com.study.usermanagementsystem.common.exception.UserException;
 import com.study.usermanagementsystem.common.response.UserStatusCode;
 import com.study.usermanagementsystem.domain.User;
 import com.study.usermanagementsystem.dto.request.SignUpRequestDto;
-import com.study.usermanagementsystem.dto.response.SignUpResponseDto;
+import com.study.usermanagementsystem.dto.response.UserResponseDto;
 import com.study.usermanagementsystem.repository.InMemoryUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,18 +12,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CreateUserService {
+public class UserCreationService {
 
     private final InMemoryUserRepository inMemoryUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SignUpResponseDto register(SignUpRequestDto requestDto) {
+    public UserResponseDto register(SignUpRequestDto requestDto) {
 
         validateDuplicateLoginId(requestDto.getUsername());
 
         User user = User.create(requestDto.getUsername(), passwordEncoder.encode(requestDto.getPassword()), requestDto.getNickname());
 
-        return SignUpResponseDto.from(inMemoryUserRepository.save(user));
+        return UserResponseDto.from(inMemoryUserRepository.save(user));
 
     }
 

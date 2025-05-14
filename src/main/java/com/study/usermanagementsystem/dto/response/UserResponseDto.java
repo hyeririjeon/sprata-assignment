@@ -9,7 +9,7 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
-public class SignUpResponseDto {
+public class UserResponseDto {
 
     private String username;
 
@@ -17,8 +17,8 @@ public class SignUpResponseDto {
 
     private List<UserRoles> roles;
 
-    public static SignUpResponseDto from(User user) {
-        return SignUpResponseDto.builder()
+    public static UserResponseDto from(User user) {
+        return UserResponseDto.builder()
                 .username(user.getUsername())
                 .nickname(user.getNickname())
                 .roles(List.of(new UserRoles(user.getRole())))
