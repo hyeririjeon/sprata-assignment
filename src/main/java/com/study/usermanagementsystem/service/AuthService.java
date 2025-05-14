@@ -22,7 +22,7 @@ public class AuthService {
     public LoginResponseDto login(LoginRequestDto requestDto) {
 
         User user = inMemoryUserRepository.findByLoginId(requestDto.getUsername())
-                .orElseThrow(() -> new UserException(UserStatusCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserException(UserStatusCode.INVALID_CREDENTIALS));
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new UserException(UserStatusCode.INVALID_CREDENTIALS);
