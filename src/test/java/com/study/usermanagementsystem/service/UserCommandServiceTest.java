@@ -26,32 +26,30 @@ class UserCommandServiceTest {
         userCommandService = new UserCommandService(inMemoryUserRepository);
         passwordEncoder = new BCryptPasswordEncoder();
 
-        // 사용자 사전 등록 - 일반
+        // given - 기본 사용자 등록
         User user = User.create("test", passwordEncoder.encode("test"), "test");
         inMemoryUserRepository.save(user);
-
     }
 
     @Test
     @DisplayName("관리자 권한 부여 성공")
     void grant_admin_role_success() {
-
+        // when - 관리자 권한 부여
         userCommandService.grantAdminRole("test");
 
+        // then - 권한이 ADMIN으로 변경되었는지 확인
         User changeUser = inMemoryUserRepository.findByLoginId("test").orElseThrow();
-
         assertEquals(UserRole.ADMIN, changeUser.getRole());
-
     }
 
     @Test
-    @DisplayName("관리자 권한 부여 실패 - 존재하지 않는 사용자 ")
+    @DisplayName("관리자 권한 부여 실패 - 존재하지 않는 사용자")
     void grant_admin_role_fail_by_no_user() {
-
-        UserException exception = assertThrows(UserException.class, () -> userCommandService.grantAdminRole("test1"));
+        // when & then - 예외 발생 확인
+        UserException exception = assertThrows(UserException.class, () -> {
+            userCommandService.grantAdminRole("test1");
+        });
 
         assertEquals(UserStatusCode.USER_NOT_FOUND, exception.getStatusCode());
-
     }
-
 }
