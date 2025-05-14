@@ -5,23 +5,32 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
 public class SignUpResponseDto {
 
     private String username;
 
-    private String password;
-
     private String nickname;
 
-    private UserRole role;
+    private List<UserRoles> roles;
 
     public static SignUpResponseDto from(User user) {
         return SignUpResponseDto.builder()
                 .username(user.getUsername())
-                .password(user.getPassword())
                 .nickname(user.getNickname())
+                .roles(List.of(new UserRoles(user.getRole())))
                 .build();
+    }
+
+    @Getter
+    private static class UserRoles {
+        private final String role;
+
+        public UserRoles(UserRole role) {
+            this.role = role.name();
+        }
     }
 }
