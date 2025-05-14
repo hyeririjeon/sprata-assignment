@@ -3,6 +3,7 @@ package com.study.usermanagementsystem.repository;
 import com.study.usermanagementsystem.domain.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,4 +33,7 @@ public class InMemoryUserRepository implements UserRepository {
                 .findFirst();
     }
 
+    public List<User> findAll() {
+        return users.values().stream().toList();
+    }
 }

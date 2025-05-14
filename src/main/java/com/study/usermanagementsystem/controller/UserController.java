@@ -2,6 +2,7 @@ package com.study.usermanagementsystem.controller;
 
 import com.study.usermanagementsystem.common.security.UserDetailsImpl;
 import com.study.usermanagementsystem.dto.request.SignUpRequestDto;
+import com.study.usermanagementsystem.dto.response.AdminUserResponseDto;
 import com.study.usermanagementsystem.dto.response.UserResponseDto;
 import com.study.usermanagementsystem.service.UserCommandService;
 import com.study.usermanagementsystem.service.UserCreationService;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +43,14 @@ public class UserController {
     @GetMapping("/myInfo")
     public ResponseEntity<UserResponseDto> getUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         UserResponseDto responseDto = userQueryService.getUser(userDetails.getUsername());
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @PreAuthorize("hasAnyRole('MASTER', 'ADMIN')")
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<AdminUserResponseDto>> getUser() {
+        List<AdminUserResponseDto> responseDto = userQueryService.getUsers();
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
