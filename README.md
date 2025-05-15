@@ -48,7 +48,7 @@ java -jar build/libs/UserManagementSystem-0.0.1-SNAPSHOT.jar
 [Swagger PDF](./docs/Swagger%20UI.pdf)
 ```text
 Local 실행 시: http://localhost:8080/swagger-ui/index.html
-배포 링크: [첨부예정]
+배포 링크: http://3.34.200.144:8080/swagger-ui/index.html 
 ```
 
 Swagger UI에서 전체 API 명세, 요청/응답 예시 및 상태 코드를 확인할 수 있습니다.
@@ -68,6 +68,9 @@ Swagger UI에서 전체 API 명세, 요청/응답 예시 및 상태 코드를 �
 ---
 
 ## 📒 API 명세 (요약)
+
+**Base URL**: http://3.34.200.144:8080
+- 예시 : http://3.34.200.144:8080/signup, http://3.34.200.144:8080/login
 
 | 메서드   | 경로                              | 설명           | 권한            |
 | ----- | ------------------------------- | ------------ | ------------- |
